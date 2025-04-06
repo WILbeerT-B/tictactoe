@@ -20,11 +20,18 @@ const players = [
     }
 ]
 
+let activePlayer = players[0];
 displayBoard();
 
 while (count <= 9) {
-    let input = prompt('Player, please choose a cell');
-    board[input - 1] = "X";
+    //switch player's turn, put active player's name and marker
+    if (count % 2 == 0) {
+        activePlayer = players[1];
+    } else {
+        activePlayer = players[0];
+    }
+    let input = prompt(`${activePlayer.name}, your marker is ${activePlayer.marker}. \nPlease choose a cell from 1-9`);
+    board[input - 1] = activePlayer.marker;
     displayBoard();
     count++;
 }
