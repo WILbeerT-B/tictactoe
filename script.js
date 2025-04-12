@@ -23,21 +23,32 @@ const players = [
 ]
 
 let activePlayer = players[0];
-displayBoard();
 
-while (count <= 9) {
-    //switch player's turn, put active player's name and marker
-    if (count % 2 == 0) {
-        activePlayer = players[1];
-    } else {
-        activePlayer = players[0];
-    }
-    let input = prompt(`${activePlayer.name}, your marker is ${activePlayer.marker}. \nPlease choose a cell from 1-9`);
-    console.log(`${activePlayer.name} put an ${activePlayer.marker} in cell ${board[input - 1]}`);
-    board[input - 1] = activePlayer.marker;
+/* function switchPlayerTurn() {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    return activePlayer;
+} */
+
+const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+}
+
+const getActivePlayer = () => activePlayer;
+
+
+function playRound() {
+
     displayBoard();
-    checkWinner();
-    count++;
+    while (count <= 9) {
+
+        let input = prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`);
+        console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board[input - 1]}`);
+        board[input - 1] = getActivePlayer().marker;
+        displayBoard();
+        checkWinner();
+        switchPlayerTurn();
+        count++;
+    }
 }
 
 function checkWinner() {
@@ -57,3 +68,5 @@ function checkWinner() {
         }
     });
 }
+
+playRound();
