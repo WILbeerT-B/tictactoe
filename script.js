@@ -9,7 +9,11 @@ function Gameboard() {
         console.log(`${cell[6]} | ${cell[7]} | ${cell[8]}`);
         console.log('');
     }
-    return { cell, displayBoard };
+
+    function updateBoard(index, marker) {
+        return cell[index - 1] = marker;
+    }
+    return { cell, displayBoard, updateBoard };
 }
 
 function GameController() {
@@ -36,7 +40,7 @@ function GameController() {
     } */
 
     const switchPlayerTurn = () => {
-        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+        return activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
     const getActivePlayer = () => activePlayer;
@@ -44,13 +48,23 @@ function GameController() {
     function playRound() {
         board.displayBoard();
         while (count <= 9) {
-            let input = prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`);
-            console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
-            board.cell[input - 1] = getActivePlayer().marker;
-            board.displayBoard();
-            checkWinner();
-            switchPlayerTurn();
-            count++;
+            let input = Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`));
+            if (isCellEmpty(input)) {
+                if (isInputValid(input)) {
+                    console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
+                    // board.cell[input - 1] = getActivePlayer().marker;
+                    board.updateBoard(board.cell[input - 1], getActivePlayer().marker);
+                    board.displayBoard();
+                    checkWinner();
+                    switchPlayerTurn();
+                    count++;
+                } else {
+                    console.log("Invalid input. Please try again.");
+                }
+            } else {
+                console.log("That cell is not empty, please choose again!");
+            }
+
         }
     }
 
@@ -71,6 +85,16 @@ function GameController() {
             }
         });
     }
+
+    function isInputValid(input) {
+        return board.cell.includes(input);
+    }
+
+    function isCellEmpty(input) {
+        return board.cell[input - 1] !== "X" && board.cell[input - 1] !== "O";
+    }
+
+
     return { playRound }
 }
 
