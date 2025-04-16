@@ -43,12 +43,16 @@ function GameController() {
         return activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
+    const incrementCount = () => count++;
+
     const getActivePlayer = () => activePlayer;
+
+    const getInput = () => Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`));
 
     function playRound() {
         board.displayBoard();
         while (count <= 9) {
-            let input = Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`));
+            let input = getInput();
             if (isCellEmpty(input)) {
                 if (isInputValid(input)) {
                     console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
@@ -57,7 +61,10 @@ function GameController() {
                     board.displayBoard();
                     checkWinner();
                     switchPlayerTurn();
-                    count++;
+                    incrementCount();
+                    if (draw()) {
+                        console.log("Game is draw");
+                    }
                 } else {
                     console.log("Invalid input. Please try again.");
                 }
@@ -92,6 +99,10 @@ function GameController() {
 
     function isCellEmpty(input) {
         return board.cell[input - 1] !== "X" && board.cell[input - 1] !== "O";
+    }
+
+    function draw() {
+        return (count == 10 && !checkWinner());
     }
 
 
