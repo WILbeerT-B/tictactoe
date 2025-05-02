@@ -19,14 +19,9 @@ function Gameboard() {
 function GameController() {
     // winning combinations that our check winner function will loop through
     const WIN_COMBOS = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [6, 4, 2]];
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [6, 4, 2]];
     // create an instance of the gameboard
     const board = Gameboard();
     const players = [
@@ -58,7 +53,7 @@ function GameController() {
     const getInput = () => input;
 
     // show prompt to get input from players
-    const promptInput = () => Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`));
+    /* const promptInput = () => Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`)); */
 
     // show messages for validations and results
     const showValidInputMessage = () => console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
@@ -66,33 +61,35 @@ function GameController() {
     const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
     const showCellNotEmptyMessage = () => console.log("That cell is not empty, please choose again!");
 
-    // play the game
-    function playGame() {
-        board.displayBoard();
-        while (getCount() <= 9) {
-            input = promptInput();
-            if (isCellEmpty(getInput())) {
-                if (isInputValid(getInput())) {
-                    showValidInputMessage();
-                    board.updateBoard(board.cell[getInput() - 1], getActivePlayer().marker);
-                    board.displayBoard();
-                    checkWinner();
-                    switchPlayerTurn();
-                    incrementCount();
-                    if (draw()) {
-                        showDrawMessage();
-                    }
-                } else {
-                    showInvalidInputMessage();
+    // play a round
+    function playRound(index) {
+        // board.displayBoard();
+        // while (count <= 9) {
+        // input = promptInput();
+        input = index;
+
+        if (isCellEmpty(getInput())) {
+            if (isInputValid(getInput())) {
+                showValidInputMessage();
+                board.updateBoard(board.cell[getInput() - 1], getActivePlayer().marker);
+                board.displayBoard();
+                checkWinner();
+                switchPlayerTurn();
+                incrementCount();
+                if (draw()) {
+                    showDrawMessage();
                 }
             } else {
-                showCellNotEmptyMessage();
+                showInvalidInputMessage();
             }
+        } else {
+            showCellNotEmptyMessage();
         }
+        // }
     }
     function checkWinner() {
         let position1, position2, position3;
-        WIN_COMBOS.forEach(win_combo => {
+        WIN_COMBOS.find(win_combo => {
             // console.log(element);
             position1 = board.cell[win_combo[0]];
             position2 = board.cell[win_combo[1]];
@@ -107,7 +104,7 @@ function GameController() {
             }
         });
     }
-    // input validations and check for draw
+    // validations and check for draw
     function isInputValid(input) {
         return board.cell.includes(input);
     }
@@ -117,8 +114,18 @@ function GameController() {
     function draw() {
         return (getCount() == 10 && !checkWinner());
     }
-    return { playGame }
+    return { playRound }
 }
 
 const tictactoe = GameController();
-tictactoe.playGame();
+tictactoe.playRound(2);
+tictactoe.playRound(1);
+tictactoe.playRound(3);
+tictactoe.playRound(4);
+tictactoe.playRound(5);
+tictactoe.playRound(41);
+tictactoe.playRound(8);
+tictactoe.playRound(9);
+tictactoe.playRound(7);
+
+
