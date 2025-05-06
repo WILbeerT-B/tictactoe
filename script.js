@@ -3,11 +3,17 @@ function Gameboard() {
     const cell = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     //function to display the board
-    function displayBoard() {
-        console.log(`${cell[0]} | ${cell[1]} | ${cell[2]}`);
+    function displayBoard(index) {
+        /* console.log(`${cell[0]} | ${cell[1]} | ${cell[2]}`);
         console.log(`${cell[3]} | ${cell[4]} | ${cell[5]}`);
         console.log(`${cell[6]} | ${cell[7]} | ${cell[8]}`);
-        console.log('');
+        console.log(''); */
+        // for (let i = 0; i < 9; i++) {
+        const cellElement = document.getElementById(`cell${index}`);
+        cellElement.textContent = `${cell[index - 1]}`;
+        // console.log(`cell${i + 1}`);
+        // }
+
     }
     // update the board
     function updateBoard(index, marker) {
@@ -22,6 +28,7 @@ function GameController() {
         [0, 1, 2], [3, 4, 5], [6, 7, 8],
         [0, 3, 6], [1, 4, 7], [2, 5, 8],
         [0, 4, 8], [6, 4, 2]];
+
     // create an instance of the gameboard
     const board = Gameboard();
     const players = [
@@ -52,27 +59,24 @@ function GameController() {
     const getActivePlayer = () => activePlayer;
     const getInput = () => input;
 
-    // show prompt to get input from players
-    /* const promptInput = () => Number(prompt(`${getActivePlayer().name}, your marker is ${getActivePlayer().marker}. \nPlease choose a cell from 1-9`)); */
-
     // show messages for validations and results
     const showValidInputMessage = () => console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
     const showDrawMessage = () => console.log("Game is draw!");
     const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
     const showCellNotEmptyMessage = () => console.log("That cell is not empty, please choose again!");
 
-    // play a round
-    function playRound(index) {
+    // call this function when the user click on an empty cell
+    function putMark(index) {
         // board.displayBoard();
         // while (count <= 9) {
         // input = promptInput();
         input = index;
 
-        if (isCellEmpty(getInput())) {
-            if (isInputValid(getInput())) {
+        if (isCellEmpty(input)) {
+            if (isInputValid(input)) {
                 showValidInputMessage();
-                board.updateBoard(board.cell[getInput() - 1], getActivePlayer().marker);
-                board.displayBoard();
+                board.updateBoard(board.cell[input - 1], getActivePlayer().marker);
+                board.displayBoard(input);
                 checkWinner();
                 switchPlayerTurn();
                 incrementCount();
@@ -114,18 +118,17 @@ function GameController() {
     function draw() {
         return (getCount() == 10 && !checkWinner());
     }
-    return { playRound }
+
+    // this handles the click event when putting a mark in a cell
+    function playGame() {
+        for (let i = 0; i < 9; i++) {
+            const cellElement = document.getElementById(`cell${i + 1}`);
+            cellElement.addEventListener("click", () => putMark(i + 1));
+        }
+    }
+
+    return { putMark, playGame }
 }
 
 const tictactoe = GameController();
-tictactoe.playRound(2);
-tictactoe.playRound(1);
-tictactoe.playRound(3);
-tictactoe.playRound(4);
-tictactoe.playRound(5);
-tictactoe.playRound(41);
-tictactoe.playRound(8);
-tictactoe.playRound(9);
-tictactoe.playRound(7);
-
-
+tictactoe.playGame();
