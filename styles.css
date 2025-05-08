@@ -4,8 +4,8 @@ body {
     /* text-align: center; */
 }
 
-.container {
-    background: green;
+.main-container {
+    /* background: green; */
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -4,17 +4,10 @@ function Gameboard() {
 
     //function to display the board
     function displayBoard(index) {
-        /* console.log(`${cell[0]} | ${cell[1]} | ${cell[2]}`);
-        console.log(`${cell[3]} | ${cell[4]} | ${cell[5]}`);
-        console.log(`${cell[6]} | ${cell[7]} | ${cell[8]}`);
-        console.log(''); */
-        // for (let i = 0; i < 9; i++) {
         const cellElement = document.getElementById(`cell${index}`);
         cellElement.textContent = `${cell[index - 1]}`;
-        // console.log(`cell${i + 1}`);
-        // }
-
     }
+
     // update the board
     function updateBoard(index, marker) {
         return cell[index - 1] = marker;
@@ -23,11 +16,6 @@ function Gameboard() {
 }
 
 function GameController() {
-    // winning combinations that our check winner function will loop through
-    const WIN_COMBOS = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [6, 4, 2]];
 
     // create an instance of the gameboard
     const board = Gameboard();
@@ -44,6 +32,11 @@ function GameController() {
     // local variables
     let count = 1;
     let input;
+    let gameActive = true;
+
+    //DOM variables
+    let turnInfo = document.getElementById("turn-info");
+    let winnerInfo = document.getElementById("game-message");
 
     // set our active player to player one
     let activePlayer = players[0];
@@ -52,6 +45,7 @@ function GameController() {
     const switchPlayerTurn = () => {
         return activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
+
     // getters / setters / private variables
     const getCount = () => count;
     const setCount = (num) => count = num;
@@ -67,45 +61,39 @@ function GameController() {
 
     // call this function when the user click on an empty cell
     function putMark(index) {
-        // board.displayBoard();
-        // while (count <= 9) {
-        // input = promptInput();
         input = index;
 
-        if (isCellEmpty(input)) {
+        if (isCellEmpty(input) && gameActive) {
             if (isInputValid(input)) {
                 showValidInputMessage();
                 board.updateBoard(board.cell[input - 1], getActivePlayer().marker);
                 board.displayBoard(input);
-                checkWinner();
-                switchPlayerTurn();
-                incrementCount();
-                if (draw()) {
-                    showDrawMessage();
+                if (checkWinner()) {
+                    gameActive = false;
+                    setMessage(turnInfo, "Game over!");
+                    displayWinner();
+                } else {
+                    switchPlayerTurn();
+                    displayTurn();
+                    incrementCount();
                 }
-            } else {
-                showInvalidInputMessage();
-            }
-        } else {
-            showCellNotEmptyMessage();
-        }
-        // }
+                if (draw()) { showDrawMessage(); }
+            } else { showInvalidInputMessage(); }
+        } else { showCellNotEmptyMessage(); }
     }
+
     function checkWinner() {
         let position1, position2, position3;
-        WIN_COMBOS.find(win_combo => {
-            // console.log(element);
-            position1 = board.cell[win_combo[0]];
-            position2 = board.cell[win_combo[1]];
-            position3 = board.cell[win_combo[2]];
-            if (position1 == position2 && position2 == position3) {
-                setCount(10);
-                if (position1 == "X") {
-                    console.log("Player 1 wins");
-                } else {
-                    console.log("Player 2 wins");
-                }
-            }
+        const WIN_COMBOS = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [6, 4, 2]];
+
+        return WIN_COMBOS.find(win_combo => {
+            // const [a, b, c] = win_combo;
+            return board.cell[win_combo[0]] === getActivePlayer().marker &&
+                board.cell[win_combo[1]] === getActivePlayer().marker &&
+                board.cell[win_combo[2]] === getActivePlayer().marker;
         });
     }
     // validations and check for draw
@@ -124,7 +112,22 @@ function GameController() {
         for (let i = 0; i < 9; i++) {
             const cellElement = document.getElementById(`cell${i + 1}`);
             cellElement.addEventListener("click", () => putMark(i + 1));
+            displayTurn();
         }
+    }
+
+    function setMessage(elementName, message) {
+        elementName.textContent = message;
+    }
+
+    function displayTurn() {
+        // turnInfo = document.getElementById("turn-info");
+        turnInfo.textContent = `${getActivePlayer().name}'s turn [${getActivePlayer().marker}]`;;
+    }
+
+    function displayWinner() {
+        // winnerInfo = document.getElementById("game-message");
+        winnerInfo.textContent = `${getActivePlayer().name} wins!`;
     }
 
     return { putMark, playGame }
