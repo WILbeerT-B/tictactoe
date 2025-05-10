@@ -55,7 +55,7 @@ function GameController() {
 
     // show messages for validations and results
     const showValidInputMessage = () => console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
-    const showDrawMessage = () => console.log("Game is draw!");
+    const showDrawMessage = () => winnerInfo.textContent = "Game is draw!";
     const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
     const showCellNotEmptyMessage = () => console.log("That cell is not empty, please choose again!");
 
@@ -77,7 +77,10 @@ function GameController() {
                     displayTurn();
                     incrementCount();
                 }
-                if (draw()) { showDrawMessage(); }
+                if (draw()) {
+                    setMessage(turnInfo, "Game over!");
+                    showDrawMessage();
+                }
             } else { showInvalidInputMessage(); }
         } else { showCellNotEmptyMessage(); }
     }
@@ -127,7 +130,7 @@ function GameController() {
 
     function displayWinner() {
         // winnerInfo = document.getElementById("game-message");
-        winnerInfo.textContent = `${getActivePlayer().name} wins!`;
+        winnerInfo.textContent = `${getActivePlayer().name} wins! [${getActivePlayer().marker}]`;
     }
 
     return { putMark, playGame }
