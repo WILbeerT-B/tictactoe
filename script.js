@@ -15,11 +15,39 @@ function Gameboard() {
     return { cell, displayBoard, updateBoard };
 }
 
+function Player(name, marker) {
+    return { name, marker };
+}
+
 function GameController() {
 
     // create an instance of the gameboard
     const board = Gameboard();
-    const players = [
+
+    let player1, player2, activePlayer;
+
+    // let name1, name2;
+
+    function initializePlayers() {
+
+        // e.preventDefault();
+        const name1 = document.getElementById("player1Name").value || "Player 1";
+        const name2 = document.getElementById("player2Name").value || "Player 2";
+        player1 = Player(name1, "X");
+        player2 = Player(name2, "O");
+        activePlayer = player1;
+        gameActive = true;
+        playGame();
+        document.getElementById("inputForm").style.display = "none";
+    }
+
+
+    /* const players = [
+        Player(name1, "X"),
+        Player(name2, "O")
+    ]; */
+
+    /* const players = [
         {
             name: "Player One",
             marker: "X"
@@ -28,22 +56,25 @@ function GameController() {
             name: "Player Two",
             marker: "O"
         }
-    ]
+    ]; */
+
+
+
     // local variables
     let count = 1;
     let input;
-    let gameActive = true;
+    // let gameActive = true;
 
     //DOM variables
     let turnInfo = document.getElementById("turn-info");
     let winnerInfo = document.getElementById("game-message");
 
     // set our active player to player one
-    let activePlayer = players[0];
+    // let activePlayer = player1;
 
     // function to switch turns throughout the game
     const switchPlayerTurn = () => {
-        return activePlayer = activePlayer === players[0] ? players[1] : players[0];
+        return activePlayer = activePlayer === player1 ? player2 : player1;
     }
 
     // getters / setters / private variables
@@ -119,6 +150,12 @@ function GameController() {
         }
     }
 
+    function initializeGame() {
+        const startBtn = document.getElementById("start");
+        startBtn.addEventListener("click", initializePlayers);
+    }
+
+
     function setMessage(elementName, message) {
         elementName.textContent = message;
     }
@@ -133,8 +170,8 @@ function GameController() {
         winnerInfo.textContent = `${getActivePlayer().name} wins! [${getActivePlayer().marker}]`;
     }
 
-    return { putMark, playGame }
+    return { putMark, playGame, initializeGame }
 }
 
 const tictactoe = GameController();
-tictactoe.playGame();
+tictactoe.initializeGame();
