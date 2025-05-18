@@ -15,22 +15,23 @@ function Gameboard() {
     return { cell, displayBoard, updateBoard };
 }
 
+// function to create players
 function Player(name, marker) {
     return { name, marker };
 }
 
 function GameController() {
-
     // create an instance of the gameboard
     const board = Gameboard();
 
-    let player1, player2, activePlayer;
+    // local variables
+    let count = 1;
+    let input;
 
-    // let name1, name2;
+    let player1, player2, activePlayer;
+    let gameActive = false;
 
     function initializePlayers() {
-
-        // e.preventDefault();
         const name1 = document.getElementById("player1Name").value || "Player 1";
         const name2 = document.getElementById("player2Name").value || "Player 2";
         player1 = Player(name1, "X");
@@ -41,38 +42,11 @@ function GameController() {
         document.getElementById("inputForm").style.display = "none";
     }
 
-
-    /* const players = [
-        Player(name1, "X"),
-        Player(name2, "O")
-    ]; */
-
-    /* const players = [
-        {
-            name: "Player One",
-            marker: "X"
-        },
-        {
-            name: "Player Two",
-            marker: "O"
-        }
-    ]; */
-
-
-
-    // local variables
-    let count = 1;
-    let input;
-    // let gameActive = true;
-
     //DOM variables
     let turnInfo = document.getElementById("turn-info");
     let winnerInfo = document.getElementById("game-message");
 
-    // set our active player to player one
-    // let activePlayer = player1;
-
-    // function to switch turns throughout the game
+    // function to switch turns
     const switchPlayerTurn = () => {
         return activePlayer = activePlayer === player1 ? player2 : player1;
     }
@@ -86,14 +60,16 @@ function GameController() {
 
     // show messages for validations and results
     const showValidInputMessage = () => console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
+
     const showDrawMessage = () => winnerInfo.textContent = "Game is draw!";
-    const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
+
+    // const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
+
     const showCellNotEmptyMessage = () => console.log("That cell is not empty, please choose again!");
 
     // call this function when the user click on an empty cell
     function putMark(index) {
         input = index;
-
         if (isCellEmpty(input) && gameActive) {
             if (isInputValid(input)) {
                 showValidInputMessage();
@@ -101,6 +77,7 @@ function GameController() {
                 board.displayBoard(input);
                 if (checkWinner()) {
                     gameActive = false;
+                    console.log("Game over!");
                     setMessage(turnInfo, "Game over!");
                     displayWinner();
                 } else {
@@ -111,6 +88,8 @@ function GameController() {
                 if (draw()) {
                     setMessage(turnInfo, "Game over!");
                     showDrawMessage();
+                    console.log("Game is draw!");
+
                 }
             } else { showInvalidInputMessage(); }
         } else { showCellNotEmptyMessage(); }
@@ -130,6 +109,7 @@ function GameController() {
                 board.cell[win_combo[2]] === getActivePlayer().marker;
         });
     }
+
     // validations and check for draw
     function isInputValid(input) {
         return board.cell.includes(input);
@@ -150,23 +130,22 @@ function GameController() {
         }
     }
 
+    // starts the game when start button is clicked
     function initializeGame() {
         const startBtn = document.getElementById("start");
         startBtn.addEventListener("click", initializePlayers);
     }
 
-
+    // change element text content
     function setMessage(elementName, message) {
         elementName.textContent = message;
     }
 
     function displayTurn() {
-        // turnInfo = document.getElementById("turn-info");
         turnInfo.textContent = `${getActivePlayer().name}'s turn [${getActivePlayer().marker}]`;;
     }
 
     function displayWinner() {
-        // winnerInfo = document.getElementById("game-message");
         winnerInfo.textContent = `${getActivePlayer().name} wins! [${getActivePlayer().marker}]`;
     }
 
