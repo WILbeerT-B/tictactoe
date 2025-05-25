@@ -4,6 +4,10 @@ body {
     /* text-align: center; */
 }
 
+div {
+    /* border: 1px solid red; */
+}
+
 .main-container {
     /* background: green; */
     display: flex;

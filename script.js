@@ -1,11 +1,12 @@
 function Gameboard() {
     // holds each cell in the board    
-    const cell = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let cell = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     //function to display the board
     function displayBoard(index) {
         const cellElement = document.getElementById(`cell${index}`);
-        cellElement.textContent = `${cell[index - 1]}`;
+        // cellElement.textContent = `${cell[index - 1]}`;
+        cellElement.textContent = cell[index - 1];
     }
 
     // update the board
@@ -29,7 +30,7 @@ function GameController() {
     let input;
 
     let player1, player2, activePlayer;
-    let gameActive = false;
+    let gameActive = true;
 
     function initializePlayers() {
         const name1 = document.getElementById("player1Name").value || "Player 1";
@@ -43,7 +44,7 @@ function GameController() {
     }
 
     //DOM variables
-    let turnInfo = document.getElementById("turn-info");
+    let turnInfo = document.getElementById("turnInfo");
     let winnerInfo = document.getElementById("game-message");
 
     // function to switch turns
@@ -62,14 +63,25 @@ function GameController() {
     const showValidInputMessage = () => console.log(`${getActivePlayer().name} put an ${getActivePlayer().marker} in cell ${board.cell[input - 1]}`);
 
     const showDrawMessage = () => winnerInfo.textContent = "Game is draw!";
-
-    // const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
-
+    const showInvalidInputMessage = () => console.log("Invalid input. Please try again.");
     const showCellNotEmptyMessage = () => console.log("That cell is not empty, please choose again!");
+
+    // validations and check for draw
+    function isInputValid(input) {
+        return board.cell.includes(input);
+    }
+    function isCellEmpty(input) {
+        return board.cell[input - 1] !== "X" && board.cell[input - 1] !== "O";
+    }
+    function draw() {
+        return (getCount() == 10 && !checkWinner());
+    }
+
 
     // call this function when the user click on an empty cell
     function putMark(index) {
         input = index;
+        console.log("You are in putMark function!");
         if (isCellEmpty(input) && gameActive) {
             if (isInputValid(input)) {
                 showValidInputMessage();
@@ -80,6 +92,7 @@ function GameController() {
                     console.log("Game over!");
                     setMessage(turnInfo, "Game over!");
                     displayWinner();
+                    // resetGame();
                 } else {
                     switchPlayerTurn();
                     displayTurn();
@@ -110,17 +123,6 @@ function GameController() {
         });
     }
 
-    // validations and check for draw
-    function isInputValid(input) {
-        return board.cell.includes(input);
-    }
-    function isCellEmpty(input) {
-        return board.cell[input - 1] !== "X" && board.cell[input - 1] !== "O";
-    }
-    function draw() {
-        return (getCount() == 10 && !checkWinner());
-    }
-
     // this handles the click event when putting a mark in a cell
     function playGame() {
         for (let i = 0; i < 9; i++) {
@@ -132,8 +134,40 @@ function GameController() {
 
     // starts the game when start button is clicked
     function initializeGame() {
+
+        /* for (let i = 0; i < 9; i++) {
+            board.displayBoard(i + 1);
+        } */
         const startBtn = document.getElementById("start");
         startBtn.addEventListener("click", initializePlayers);
+
+        const restartBtn = document.getElementById("restartBtn");
+        restartBtn.addEventListener("click", resetGame);
+    }
+
+    function resetBoard() {
+        for (let i = 0; i < 9; i++) {
+            board.cell[i] = i + 1;
+        }
+        return board.cell;
+    }
+
+    function resetGame() {
+        setCount(1);
+        resetBoard();
+        gameActive = true;
+        activePlayer = player2;
+        displayTurn();
+        setMessage(winnerInfo, "[Place your mark!]");
+        for (let i = 0; i < 9; i++) {
+            const cellElement = document.getElementById(`cell${i + 1}`);
+            cellElement.textContent = "";
+        }
+        console.log("Reset game!");
+    }
+
+    function clearBoard() {
+
     }
 
     // change element text content
