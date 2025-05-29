@@ -19,6 +19,7 @@
 
     <div class="input-container">
         <form id="inputForm">
+            <p>Enter player names and/or press Start</p>
             <div class="input-row">
                 <label for="player1Name"></label>
                 <input type="text" name="player1Name" id="player1Name" placeholder="Player 1 name">
@@ -27,7 +28,9 @@
                 <label for="player2Name"></label>
                 <input type="text" name="player2Name" id="player2Name" placeholder="Player 2 name">
             </div>
-            <button type="button" id="start" form="inputForm">Start</button>
+            <div class="input-row">
+                <button type="button" id="start" form="inputForm">Start</button>
+            </div>
         </form>
     </div>
 
@@ -35,8 +38,9 @@
         <div id="turnInfo">
             <!-- Some info -->
         </div>
-        <div id="game-message">
-            [Place your mark]
+        <div id="gameMessage">
+            <!-- [Place your mark] -->
+            <p id="gameMsge"></p>
         </div>
         <div class="board">
             <div class="cell" id="cell1"></div>

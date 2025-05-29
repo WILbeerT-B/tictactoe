@@ -1,32 +1,67 @@
+html,
+body {
+    box-sizing: border-box;
+}
+
 body {
     background-color: black;
     color: white;
     /* text-align: center; */
 }
 
-div {
-    /* border: 1px solid red; */
+/* header */
+.header-container {
+    border: 1px solid red;
+    text-align: center;
+    margin-bottom: 20px;
+    /* display: flex; */
 }
 
+
+/* input */
+.input-container {
+    border: 1px solid blue;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+#inputForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-row {
+    flex: 1 1 auto;
+    border: 1px solid orange;
+}
+
+
+/* main */
 .main-container {
+    border: 1px solid green;
     /* background: green; */
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.container>div {
-    /* flex: 1; */
-    border: 1px dashed red;
-}
-
 .board {
+    /* border: 3px solid pink; */
     display: grid;
     grid-template-columns: 100px 100px 100px;
     grid-template-rows: 100px 100px 100px;
 }
 
 .cell {
-    border: 1px solid white;
+    border: 1px solid black;
     font-size: 100px;
 }
+
+.active {
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+
+/* restart */

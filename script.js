@@ -32,6 +32,24 @@ function GameController() {
     let player1, player2, activePlayer;
     let gameActive = true;
 
+
+    //DOM variables
+    let restartBtn = document.getElementById("restartBtn");
+    let activeCells = document.querySelectorAll(".cell");
+    let turnInfo = document.getElementById("turnInfo");
+    let winnerInfo = document.getElementById("gameMsge");
+
+    if (gameActive) {
+        restartBtn.disabled = true;
+        winnerInfo.textContent = "";
+        // activeCells.classList.toggle("active");
+    } else {
+        restartBtn.disabled = false;
+        winnerInfo.textContent = "[Place your marker]";
+
+    }
+
+
     function initializePlayers() {
         const name1 = document.getElementById("player1Name").value || "Player 1";
         const name2 = document.getElementById("player2Name").value || "Player 2";
@@ -39,13 +57,10 @@ function GameController() {
         player2 = Player(name2, "O");
         activePlayer = player1;
         gameActive = true;
+        // activeCells.classList.toggle("active");
         playGame();
         document.getElementById("inputForm").style.display = "none";
     }
-
-    //DOM variables
-    let turnInfo = document.getElementById("turnInfo");
-    let winnerInfo = document.getElementById("game-message");
 
     // function to switch turns
     const switchPlayerTurn = () => {
@@ -77,7 +92,6 @@ function GameController() {
         return (getCount() == 10 && !checkWinner());
     }
 
-
     // call this function when the user click on an empty cell
     function putMark(index) {
         input = index;
@@ -92,6 +106,7 @@ function GameController() {
                     console.log("Game over!");
                     setMessage(turnInfo, "Game over!");
                     displayWinner();
+                    showResetBtn();
                     // resetGame();
                 } else {
                     switchPlayerTurn();
@@ -102,7 +117,7 @@ function GameController() {
                     setMessage(turnInfo, "Game over!");
                     showDrawMessage();
                     console.log("Game is draw!");
-
+                    showResetBtn();
                 }
             } else { showInvalidInputMessage(); }
         } else { showCellNotEmptyMessage(); }
@@ -125,6 +140,10 @@ function GameController() {
 
     // this handles the click event when putting a mark in a cell
     function playGame() {
+        activeCells.forEach((activeCell) => {
+            activeCell.classList.add("active");
+        });
+        setMessage(winnerInfo, "[Place your mark]");
         for (let i = 0; i < 9; i++) {
             const cellElement = document.getElementById(`cell${i + 1}`);
             cellElement.addEventListener("click", () => putMark(i + 1));
@@ -141,7 +160,7 @@ function GameController() {
         const startBtn = document.getElementById("start");
         startBtn.addEventListener("click", initializePlayers);
 
-        const restartBtn = document.getElementById("restartBtn");
+        restartBtn = document.getElementById("restartBtn");
         restartBtn.addEventListener("click", resetGame);
     }
 
@@ -157,6 +176,7 @@ function GameController() {
         resetBoard();
         gameActive = true;
         activePlayer = player2;
+        restartBtn.disabled = true;
         displayTurn();
         setMessage(winnerInfo, "[Place your mark!]");
         for (let i = 0; i < 9; i++) {
@@ -168,6 +188,12 @@ function GameController() {
 
     function clearBoard() {
 
+    }
+
+    function showResetBtn() {
+        const restartBtn = document.getElementById("restartBtn");
+        restartBtn.disabled = false;
+        restartBtn.addEventListener("click", resetGame);
     }
 
     // change element text content
