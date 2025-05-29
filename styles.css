@@ -1,6 +1,7 @@
 html,
 body {
     box-sizing: border-box;
+    font-family: monospace;
 }
 
 body {
@@ -11,7 +12,8 @@ body {
 
 /* header */
 .header-container {
-    border: 1px solid red;
+    /* border: 1px solid red; */
+    border-bottom: 1px solid whitesmoke;
     text-align: center;
     margin-bottom: 20px;
     /* display: flex; */
@@ -20,7 +22,7 @@ body {
 
 /* input */
 .input-container {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     text-align: center;
     margin-bottom: 20px;
     padding: 20px;
@@ -29,17 +31,23 @@ body {
 #inputForm {
     display: flex;
     flex-direction: column;
+    gap: 1em;
 }
 
 .input-row {
     flex: 1 1 auto;
-    border: 1px solid orange;
+    /* border: 1px solid orange; */
+}
+
+input {
+    padding: 12px;
+    width: 25%;
 }
 
 
 /* main */
 .main-container {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     /* background: green; */
     display: flex;
     flex-direction: column;
@@ -56,6 +64,7 @@ body {
 .cell {
     border: 1px solid black;
     font-size: 100px;
+    text-align: center;
 }
 
 .active {
@@ -64,4 +73,41 @@ body {
 }
 
 
-/* restart */
+
+/* buttons */
+button {
+    margin: 14px;
+    padding: 10px;
+    width: 80px;
+    /* background-color: transparent; */
+    color: black;
+    /* border: 1px solid white; */
+    border-radius: 6px;
+}
+
+#restart {
+    margin-top: 12px;
+}
+
+
+/* footer */
+.footer-container {
+    text-align: center;
+    margin-top: 24px;
+    border-top: 1px solid whitesmoke;
+    padding: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+}
+
+.footer-container>a {
+    color: whitesmoke;
+    text-decoration: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+img {
+    height: 20px;
+    width: auto;
+}
